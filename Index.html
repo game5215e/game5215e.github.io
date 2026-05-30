@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>倒數計時測試表單</title>
+    <style>
+        /* 基礎設定與深色背景 */
+        :root {
+            --bg-top: #101935;
+            --bg-bottom: #04070f;
+            --text-main: #ffffff;
+            --text-muted: #8a94a6;
+            --border-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 100%);
+            color: var(--text-main);
+            font-family: 'PingFang TC', 'Helvetica Neue', 'Microsoft JhengHei', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px; /* 模擬手機版寬度 */
+            padding: 40px 30px;
+            box-sizing: border-box;
+        }
+
+        /* 頂部資訊區塊 */
+        .header-small {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        
+        h1.team-number {
+            font-size: 64px;
+            font-weight: 300;
+            margin: 0 0 20px 0;
+            letter-spacing: 2px;
+        }
+
+        .quote {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .date-info {
+            font-size: 12px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+        }
+
+        .divider {
+            height: 1px;
+            background-color: var(--border-color);
+            margin: 30px 0;
+        }
+
+        /* 倒數計時區塊 */
+        .countdown-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        .timer-display {
+            font-size: 56px;
+            font-weight: 200;
+            letter-spacing: 4px;
+            margin: 10px 0 20px 0;
+        }
+
+        .action-text {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+        }
+
+        .scroll-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+        }
+
+        /* 時間軸區塊 */
+        .timeline-title {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 25px;
+        }
+
+        .timeline {
+            border-left: 1px solid var(--border-color);
+            margin-left: 6px;
+            padding-left: 25px;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 35px;
+        }
+
+        /* 時間軸上的小圓點 */
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -29px;
+            top: 4px;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: transparent;
+            border: 1px solid var(--text-muted);
+        }
+
+        .time {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+        }
+
+        .event-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin: 0 0 4px 0;
+            letter-spacing: 1px;
+        }
+
+        .event-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        /* 標籤樣式 (如：秘密花園、芳療) */
+        .tags {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tag {
+            font-size: 11px;
+            color: var(--text-muted);
+            border: 1px solid var(--border-color);
+            padding: 3px 8px;
+            border-radius: 4px;
+        }
+
+        /* 底部提醒事項區塊 */
+        .rules-card {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .rules-title {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .rule-item {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.8;
+            margin-bottom: 12px;
+            display: flex;
+        }
+
+        .rule-item::before {
+            content: '—';
+            margin-right: 10px;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-small">倒數計時測試表單</div>
+        <h1 class="team-number" id="teamDisplay">No.—</h1>
+        
+        <div class="quote">
+            今晚我會來到這裡，<br>
+            一定有著上天要給我的啟示。
+        </div>
+        
+        <div class="date-info">
+            2026 / 5 / 30 &nbsp;&middot;&nbsp; 18:30 – 21:30
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="countdown-title">距離集合還有</div>
+        <div class="timer-display" id="timer">00 00 00</div>
+        <div class="action-text">19:50 &middot; 前往 三樓 306-310 集合</div>
+        
+        <div class="scroll-hint">&darr; 查看今晚行程</div>
+        <div class="divider"></div>
+
+        <div class="timeline-title">你的今晚行程</div>
+        
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="time">19:50</div>
+                <h3 class="event-title">集合</h3>
+                <div class="event-desc">前往 三樓 306-310</div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time">20:00</div>
+                <h3 class="event-title">包廂 C</h3>
+                <div class="event-desc">三樓 306-310</div>
+                <div class="tags">
+                    <span class="tag">秘密花園</span>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time">20:30</div>
+                <h3 class="event-title">包廂 B</h3>
+                <div class="event-desc">五樓 509-510</div>
+                <div class="tags">
+                    <span class="tag">芳療</span>
+                    <span class="tag">塔羅</span>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time">21:00</div>
+                <h3 class="event-title">包廂 A</h3>
+                <div class="event-desc">五樓 506-508</div>
+                <div class="tags">
+                    <span class="tag">瑜珈</span>
+                    <span class="tag">頌缽</span>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="time">21:30</div>
+                <h3 class="event-title">夜聊時間</h3>
+                <div class="event-desc">大廳自由交流</div>
+            </div>
+        </div>
+
+        <div class="rules-card">
+            <div class="rules-title">進場提醒</div>
+            <div class="rule-item">穿著舒適寬鬆的長袖衣褲</div>
+            <div class="rule-item">靜默入場，踏進包廂後不以言語打破氛圍</div>
+            <div class="rule-item">包廂 C（秘密花園）：使用完的畫筆請放回公用桌</div>
+            <div class="rule-item">包廂 B（芳療·塔羅）：請以圖書館音量交談</div>
+            <div class="rule-item">包廂 A（瑜珈·頌缽）：穿寬鬆長褲，準備脫鞋踩瑜珈墊；能脫襪更好</div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. 處理網址列的 Team 號碼 ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const teamNumber = urlParams.get('team');
+        const displayElement = document.getElementById('teamDisplay');
+        
+        if (teamNumber) {
+            displayElement.innerText = "No." + teamNumber;
+        }
+
+        // --- 2. 處理倒數計時器 ---
+        function updateTimer() {
+            const now = new Date();
+            
+            // 設定倒數目標時間 (目前設定為今天的 19:50:00)
+            let targetTime = new Date();
+            targetTime.setHours(19, 50, 0, 0);
+
+            // 如果現在時間已經超過今天的 19:50，就把目標設為明天的 19:50
+            if (now > targetTime) {
+                targetTime.setDate(targetTime.getDate() + 1);
+            }
+
+            const diff = targetTime - now;
+
+            // 計算時、分、秒
+            let hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            let minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            let seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            // 補零 (讓 9 變成 09)
+            hours = String(hours).padStart(2, '0');
+            minutes = String(minutes).padStart(2, '0');
+            seconds = String(seconds).padStart(2, '0');
+
+            // 更新畫面上的數字 (使用空格分隔，模仿截圖的設計)
+            document.getElementById('timer').innerText = `${hours} ${minutes} ${seconds}`;
+        }
+
+        // 立即執行一次，然後每秒更新一次
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    </script>
+</body>
+</html>
